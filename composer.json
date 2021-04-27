@@ -1,5 +1,5 @@
 {
-    "name": "laravel/laravel",
+    "name": "hexlet/code",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
@@ -11,6 +11,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.2",
         "rollbar/rollbar-laravel": "^7.0"
     },
     "require-dev": {
@@ -19,7 +20,9 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
+        "phpstan/phpstan": "^0.12.84",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
         "psr-4": {
@@ -34,6 +37,8 @@
         }
     },
     "scripts": {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
