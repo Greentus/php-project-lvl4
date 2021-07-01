@@ -11,7 +11,7 @@ watch:
 	npm run watch
 
 migrate:
-	php artisan migrate
+	php artisan migrate --seed
 
 console:
 	php artisan tinker

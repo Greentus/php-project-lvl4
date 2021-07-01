@@ -2958,12 +2958,12 @@ textarea.form-control-lg {
 }
 
 .btn-primary {
-  color: #fff;
+  color: #000;
   background-color: #3490dc;
   border-color: #3490dc;
 }
 .btn-primary:hover {
-  color: #fff;
+  color: #000;
   background-color: #52a1e1;
   border-color: #489be0;
 }
