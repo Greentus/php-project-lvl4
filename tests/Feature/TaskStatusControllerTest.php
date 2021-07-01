@@ -11,10 +11,9 @@ use Tests\TestCase;
 
 class TaskStatusControllerTest extends TestCase
 {
-    private array $data;
-    private const email = 'user@test.domain';
-    private const password = 'secret123';
-    private const test_status = 'Test status';
+    private const EMAIL = 'user@test.domain';
+    private const PASSWORD = 'secret123';
+    private const TEST_STATUS = 'Test status';
 
     /**
      * Setting initial values.
@@ -29,8 +28,8 @@ class TaskStatusControllerTest extends TestCase
         Session::start();
         User::create([
             'name' => 'Test',
-            'email' => self::email,
-            'password' => bcrypt(self::password),
+            'email' => self::EMAIL,
+            'password' => bcrypt(self::PASSWORD),
         ]);
     }
 
@@ -46,7 +45,7 @@ class TaskStatusControllerTest extends TestCase
         $response->assertDontSee(__('app.button_delete'));
         $response->assertDontSee(__('app.button_change'));
 
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
@@ -66,7 +65,7 @@ class TaskStatusControllerTest extends TestCase
         $response = $this->get(route('task_statuses.create'));
         $response->assertDontSee(__('app.button_create'));
 
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
@@ -81,16 +80,16 @@ class TaskStatusControllerTest extends TestCase
      */
     public function testStore()
     {
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
-        $response = $this->post(route('task_statuses.store'), ['_token' => csrf_token(), 'name' => self::test_status]);
+        $response = $this->post(route('task_statuses.store'), ['_token' => csrf_token(), 'name' => self::TEST_STATUS]);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
-        $this->assertDatabaseHas('task_statuses', ['name' => self::test_status]);
+        $this->assertDatabaseHas('task_statuses', ['name' => self::TEST_STATUS]);
 
-        $response = $this->post(route('task_statuses.store'), ['_token' => csrf_token(), 'name' => self::test_status]);
+        $response = $this->post(route('task_statuses.store'), ['_token' => csrf_token(), 'name' => self::TEST_STATUS]);
         $response->assertSessionHasErrors();
         $response->assertRedirect();
     }
@@ -107,7 +106,7 @@ class TaskStatusControllerTest extends TestCase
         $response->assertDontSee($status->name);
         $response->assertDontSee(__('app.button_update'));
 
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
@@ -123,7 +122,7 @@ class TaskStatusControllerTest extends TestCase
      */
     public function testUpdate()
     {
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
@@ -153,7 +152,7 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('task_statuses', ['id' => $status->id]);
 
-        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::email, 'password' => self::password]);
+        $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::EMAIL, 'password' => self::PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
