@@ -161,5 +161,4 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseMissing('task_statuses', ['id' => $status->id]);
     }
-
 }
