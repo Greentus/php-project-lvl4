@@ -6,7 +6,7 @@
         <input name="_method" type="hidden" value="PATCH">
         @csrf
         <div class="row mb-3">
-            <label for="name">{{ __('app.label_name') }}</label>
+            <label for="name" class="form-label">{{ __('app.label_name') }}</label>
             <input id="name" name="name" type="text" class="form-control  @error('name') is-invalid @enderror" value="{{ $errors->any() ? old('name') : $status->name }}" required>
             @error('name')
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

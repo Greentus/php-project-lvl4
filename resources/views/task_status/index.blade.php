@@ -24,9 +24,9 @@
                 <td>{{ $status->created_at ? $status->created_at->format('d.m.Y') : ''}}</td>
                 @auth()
                     <td>
-                        <a href="{{ route('task_statuses.edit', ['task_status' => $status->id]) }}">{{ __('app.button_change') }}</a>
+                        <a href="{{ route('task_statuses.edit', ['task_status' => $status->id]) }}" class="text-decoration-none">{{ __('app.button_change') }}</a>
                         &nbsp;
-                        <a class="text-danger" href="{{ route('task_statuses.destroy', ['task_status' => $status->id]) }}" data-confirm="Вы уверены?" data-method="delete">{{ __('app.button_delete') }}</a>
+                        <a class="text-danger text-decoration-none" href="{{ route('task_statuses.destroy', ['task_status' => $status->id]) }}" data-confirm="Вы уверены?" data-method="delete">{{ __('app.button_delete') }}</a>
                     </td>
                 @endauth
             </tr>

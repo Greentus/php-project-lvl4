@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">{{ __('app.link_task') }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">{{ __('app.link_task') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('task_statuses.index') }}">{{ __('app.link_status') }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">{{ __('app.link_label') }}</a></li>
                 </ul>

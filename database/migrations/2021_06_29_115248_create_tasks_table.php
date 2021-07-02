@@ -19,7 +19,9 @@ class CreateTasksTable extends Migration
             $table->text('description')->nullable();
             $table->integer('status_id');
             $table->foreign('status_id')->references('id')->on('task_statuses');
-            $table->integer('assigned_to_id');
+            $table->integer('created_by_id');
+            $table->foreign('created_by_id')->references('id')->on('users');
+            $table->integer('assigned_to_id')->nullable();
             $table->foreign('assigned_to_id')->references('id')->on('users');
             $table->timestamps();
         });
