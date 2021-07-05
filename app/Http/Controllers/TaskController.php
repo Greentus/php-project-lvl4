@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
+use App\Models\TaskLabel;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,7 +32,8 @@ class TaskController extends Controller
     {
         $statuses = TaskStatus::all();
         $users = User::all();
-        return view('task.create', ['statuses' => $statuses, 'users' => $users]);
+        $labels = Label::all();
+        return view('task.create', ['statuses' => $statuses, 'users' => $users, 'labels' => $labels]);
     }
 
     /**
@@ -58,6 +61,16 @@ class TaskController extends Controller
         $task->created_by_id = Auth::id();
         $task->assigned_to_id = $request->assigned_to_id ? $request->assigned_to_id : null;
         if ($task->save()) {
+            if (!empty($request->labels) && is_array($request->labels)) {
+                foreach ($request->labels as $label) {
+                    if (!is_null($label)) {
+                        $taskLabel = new TaskLabel();
+                        $taskLabel->task_id = $task->id;
+                        $taskLabel->label_id = $label;
+                        $taskLabel->save();
+                    }
+                }
+            }
             flash(__('app.task_stored'))->success();
         } else {
             flash(__('app.task_not_stored'))->error();
@@ -86,7 +99,9 @@ class TaskController extends Controller
     {
         $statuses = TaskStatus::all();
         $users = User::all();
-        return view('task.edit', ['statuses' => $statuses, 'users' => $users, 'task' => $task]);
+        $labels = Label::all();
+        $taskLabels = $task->labels->pluck('label_id')->toArray();
+        return view('task.edit', ['statuses' => $statuses, 'users' => $users, 'task' => $task, 'labels' => $labels, 'task_labels' => $taskLabels]);
     }
 
     /**
@@ -113,6 +128,19 @@ class TaskController extends Controller
         $task->status_id = $request->status_id;
         $task->assigned_to_id = $request->assigned_to_id ? $request->assigned_to_id : null;
         if ($task->save()) {
+            if (!empty($request->labels) && is_array($request->labels)) {
+                foreach ($request->labels as $label) {
+                    foreach ($task->labels as $taskLabel) {
+                        $taskLabel->delete();
+                    }
+                    if (!is_null($label)) {
+                        $taskLabel = new TaskLabel();
+                        $taskLabel->task_id = $task->id;
+                        $taskLabel->label_id = $label;
+                        $taskLabel->save();
+                    }
+                }
+            }
             flash(__('app.task_updated'))->success();
         } else {
             flash(__('app.task_not_updated'))->error();

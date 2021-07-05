@@ -27,11 +27,7 @@ class TaskStatusControllerTest extends TestCase
         config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:']);
         Artisan::call('migrate --seed');
         Session::start();
-        User::create([
-            'name' => self::TEST_USER,
-            'email' => self::TEST_EMAIL,
-            'password' => bcrypt(self::TEST_PASSWORD),
-        ]);
+        User::create(['name' => self::TEST_USER, 'email' => self::TEST_EMAIL, 'password' => bcrypt(self::TEST_PASSWORD)]);
     }
 
     /**
@@ -127,14 +123,14 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertAuthenticated();
 
-        $status = TaskStatus::first();
-
-        $response = $this->patch(route('task_statuses.update', ['task_status' => $status->id]), ['_token' => csrf_token(), 'name' => $status->name]);
+        $status1 = TaskStatus::orderBy('name')->first();
+        $status2 = TaskStatus::orderBy('name', 'desc')->first();
+        $response = $this->patch(route('task_statuses.update', ['task_status' => $status1->id]), ['_token' => csrf_token(), 'name' => $status2->name]);
         $response->assertSessionHasErrors();
         $response->assertRedirect();
 
-        $str = Str::random(20);
-        $response = $this->patch(route('task_statuses.update', ['task_status' => $status->id]), ['_token' => csrf_token(), 'name' => $str]);
+        $str = Str::random(100);
+        $response = $this->patch(route('task_statuses.update', ['task_status' => $status1->id]), ['_token' => csrf_token(), 'name' => $str]);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $this->assertDatabaseHas('task_statuses', ['name' => $str]);

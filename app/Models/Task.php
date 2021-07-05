@@ -38,4 +38,14 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'created_by_id', 'id');
     }
+
+    /**
+     * Many to Many Relation To Labels
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function labels()
+    {
+        return $this->hasMany(TaskLabel::class, 'task_id', 'id');
+    }
 }

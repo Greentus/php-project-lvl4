@@ -43,6 +43,18 @@
             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
             @enderror
         </div>
+        <div class="row mb-3">
+            <label for="labels" class="form-label">{{ __('app.label_labels') }}</label>
+            <select id="labels" name="labels[]" class="form-select @error('labels') is-invalid @enderror" multiple>
+                <option value="">----------</option>
+                @foreach($labels as $label)
+                    <option @if (in_array($label->id,$errors->any() ? old('labels') : $task_labels)) selected="selected" @endif value="{{ $label->id }}">{{ $label->name }}</option>
+                @endforeach
+            </select>
+            @error('labels')
+            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
         <input class="btn btn-primary" type="submit" value="{{ __('app.button_update') }}">
     </form>
 @endsection

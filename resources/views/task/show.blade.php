@@ -5,4 +5,11 @@
     <p>{{ __('app.label_name') }}: {{ $task->name }}</p>
     <p>{{ __('app.label_status') }}: {{ $task->status->name }}</p>
     <p>{{ __('app.label_description') }}: {{ $task->description }}</p>
+    @if ($task->labels->count()>0)
+        <p>{{ __('app.label_labels') }}:
+            @foreach($task->labels as $task_label)
+                {{ $task_label->label->name.($loop->last ? '' : ', ') }}
+            @endforeach
+        </p>
+    @endif
 @endsection
