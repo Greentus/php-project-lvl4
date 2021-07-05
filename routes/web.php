@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskStatusController;
@@ -17,11 +18,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('task_statuses', TaskStatusController::class)->only(['index']);
-Route::resource('task_statuses', TaskStatusController::class)->middleware('auth')->except(['index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('tasks', TaskController::class)->only(['index']);
-Route::resource('tasks', TaskController::class)->middleware('auth')->except(['index']);
+Route::resource('task_statuses', TaskStatusController::class)->only(['index']);
 Route::resource('labels', LabelController::class)->only(['index']);
-Route::resource('labels', LabelController::class)->middleware('auth')->except(['index']);
+
+Auth::routes();
+Route::middleware('auth')->group(function () {
+    Route::resource('tasks', TaskController::class)->except(['index']);
+    Route::resource('task_statuses', TaskStatusController::class)->except(['index']);
+    Route::resource('labels', LabelController::class)->except(['index']);
+});

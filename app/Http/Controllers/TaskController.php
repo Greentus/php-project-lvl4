@@ -9,18 +9,27 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::paginate();
-        return view('task.index', ['tasks' => $tasks]);
+        $tasks = QueryBuilder::for(Task::class)->allowedFilters([
+            AllowedFilter::exact('status_id'),
+            AllowedFilter::exact('created_by_id'),
+            AllowedFilter::exact('assigned_to_id')
+        ])->paginate();
+        $statuses = TaskStatus::all();
+        $users = User::all();
+        return view('task.index', ['tasks' => $tasks, 'statuses' => $statuses, 'users' => $users, 'filter' => $request->filter]);
     }
 
     /**
