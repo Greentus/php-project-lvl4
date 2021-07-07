@@ -79,8 +79,8 @@ class TaskController extends Controller
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status_id = $request->status_id;
-        $task->created_by_id = Auth::user()->id;
-        $task->assigned_to_id = $request->assigned_to_id ? $request->assigned_to_id : null;
+        $task->created_by_id = (int)Auth::id();
+        $task->assigned_to_id = $request->has('assigned_to_id') ? $request->assigned_to_id : null;
         if ($task->save() == true) {
             if ($request->has('labels') && is_array($request->labels)) {
                 foreach ($request->labels as $label) {

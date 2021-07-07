@@ -101,8 +101,7 @@ class LabelControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $label = Label::first();
-        settype($label, 'object');
+        $label = (object)Label::first();
         $response = $this->get(route('labels.edit', ['label' => $label->id]));
         $response->assertDontSee($label->name);
         $response->assertDontSee(strval(__('app.button_update')));
@@ -127,8 +126,7 @@ class LabelControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertAuthenticated();
 
-        $label = Label::first();
-        settype($label, 'object');
+        $label = (object)Label::first();
         Label::create(['name' => self::TEST_LABEL, 'description' => Str::random(100)]);
 
         $response = $this->patch(route('labels.update', ['label' => $label->id]), ['_token' => csrf_token(), 'name' => self::TEST_LABEL]);
@@ -149,8 +147,7 @@ class LabelControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $label = Label::first();
-        settype($label, 'object');
+        $label = (object)Label::first();
 
         $response = $this->delete(route('labels.destroy', ['label' => $label->id]), ['_token' => csrf_token()]);
         $response->assertRedirect();

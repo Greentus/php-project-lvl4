@@ -38,18 +38,18 @@ class TaskStatusControllerTest extends TestCase
     public function testIndex()
     {
         $response = $this->get(route('task_statuses.index'));
-        $response->assertDontSee(__('app.header_actions'));
-        $response->assertDontSee(__('app.button_delete'));
-        $response->assertDontSee(__('app.button_change'));
+        $response->assertDontSee(strval(__('app.header_actions')));
+        $response->assertDontSee(strval(__('app.button_delete')));
+        $response->assertDontSee(strval(__('app.button_change')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
         $response = $this->get(route('task_statuses.index'));
-        $response->assertSee(__('app.header_actions'));
-        $response->assertSee(__('app.button_delete'));
-        $response->assertSee(__('app.button_change'));
+        $response->assertSee(strval(__('app.header_actions')));
+        $response->assertSee(strval(__('app.button_delete')));
+        $response->assertSee(strval(__('app.button_change')));
     }
 
     /**
@@ -60,14 +60,14 @@ class TaskStatusControllerTest extends TestCase
     public function testCreate()
     {
         $response = $this->get(route('task_statuses.create'));
-        $response->assertDontSee(__('app.button_create'));
+        $response->assertDontSee(strval(__('app.button_create')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
         $response = $this->get(route('task_statuses.create'));
-        $response->assertSee(__('app.button_create'));
+        $response->assertSee(strval(__('app.button_create')));
     }
 
     /**
@@ -98,10 +98,10 @@ class TaskStatusControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $status = TaskStatus::first();
+        $status = (object)TaskStatus::first();
         $response = $this->get(route('task_statuses.edit', ['task_status' => $status->id]));
         $response->assertDontSee($status->name);
-        $response->assertDontSee(__('app.button_update'));
+        $response->assertDontSee(strval(__('app.button_update')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
@@ -109,7 +109,7 @@ class TaskStatusControllerTest extends TestCase
 
         $response = $this->get(route('task_statuses.edit', ['task_status' => $status->id]));
         $response->assertSee($status->name);
-        $response->assertSee(__('app.button_update'));
+        $response->assertSee(strval(__('app.button_update')));
     }
 
     /**
@@ -123,8 +123,8 @@ class TaskStatusControllerTest extends TestCase
         $response->assertRedirect();
         $this->assertAuthenticated();
 
-        $status1 = TaskStatus::orderBy('name')->first();
-        $status2 = TaskStatus::orderBy('name', 'desc')->first();
+        $status1 = (object)TaskStatus::orderBy('name')->first();
+        $status2 = (object)TaskStatus::orderBy('name', 'desc')->first();
         $response = $this->patch(route('task_statuses.update', ['task_status' => $status1->id]), ['_token' => csrf_token(), 'name' => $status2->name]);
         $response->assertSessionHasErrors();
         $response->assertRedirect();
@@ -143,7 +143,7 @@ class TaskStatusControllerTest extends TestCase
      */
     public function testDelete()
     {
-        $status = TaskStatus::first();
+        $status = (object)TaskStatus::first();
 
         $response = $this->delete(route('task_statuses.destroy', ['task_status' => $status->id]), ['_token' => csrf_token()]);
         $response->assertRedirect();
