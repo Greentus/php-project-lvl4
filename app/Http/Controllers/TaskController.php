@@ -27,8 +27,12 @@ class TaskController extends Controller
             AllowedFilter::exact('created_by_id'),
             AllowedFilter::exact('assigned_to_id')
         ])->paginate();
-        $statuses = TaskStatus::all();
-        $users = User::all();
+        $statuses = TaskStatus::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
+        $users = User::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
         return view('task.index', ['tasks' => $tasks, 'statuses' => $statuses, 'users' => $users, 'filter' => $request->filter]);
     }
 
@@ -39,9 +43,15 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $statuses = TaskStatus::all();
-        $users = User::all();
-        $labels = Label::all();
+        $statuses = TaskStatus::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
+        $users = User::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
+        $labels = Label::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
         return view('task.create', ['statuses' => $statuses, 'users' => $users, 'labels' => $labels]);
     }
 
@@ -106,9 +116,15 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        $statuses = TaskStatus::all();
-        $users = User::all();
-        $labels = Label::all();
+        $statuses = TaskStatus::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
+        $users = User::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
+        $labels = Label::all()->reduce(function ($arr, $item) {
+            return $arr + [$item->id => $item->name];
+        }, []);
         $taskLabels = $task->labels->pluck('label_id')->toArray();
         return view('task.edit', ['statuses' => $statuses, 'users' => $users, 'task' => $task, 'labels' => $labels, 'task_labels' => $taskLabels]);
     }
@@ -165,8 +181,15 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        if ($task->created_by_id == Auth::id() && $task->delete()) {
-            flash(__('app.task_deleted'))->success();
+        if ($task->created_by_id == Auth::id()) {
+            foreach ($task->labels as $label) {
+                $label->delete();
+            }
+            if ($task->delete()) {
+                flash(__('app.task_deleted'))->success();
+            } else {
+                flash(__('app.task_not_deleted'))->error();
+            }
         } else {
             flash(__('app.task_not_deleted'))->error();
         }

@@ -2,15 +2,15 @@
 
 @section('content')
     <h1 class="mb-5">{{ __('app.button_status_create') }}</h1>
-    <form method="POST" action="{{ route('task_statuses.store') }}" class="w-50">
-        @csrf
-        <div class="row mb-3">
-            <label for="name" class="form-label">{{ __('app.label_name') }}</label>
-            <input id="name" name="name" type="text" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
-            @error('name')
-            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-            @enderror
-        </div>
-        <input class="btn btn-primary" type="submit" value="{{ __('app.button_create') }}">
-    </form>
+    {!! Form::open(['url' => route('task_statuses.store'), 'class'=>'w-50']) !!}
+    @csrf
+    <div class="row mb-3">
+        {!! Form::label('name', __('app.label_name'), ['class' => 'form-label']) !!}
+        {!! Form::text('name', old('name'), ['class' => 'form-control'.($errors->has('name') ? ' is-invalid' : '')]) !!}
+        @error('name')
+        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+        @enderror
+    </div>
+    {!! Form::submit(__('app.button_create'), ['class' => 'btn btn-primary']) !!}
+    {!! Form::close() !!}
 @endsection

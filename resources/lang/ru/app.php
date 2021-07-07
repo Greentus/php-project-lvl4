@@ -12,6 +12,7 @@ return [
     'button_status_create' => 'Создать статус',
     'button_task_create' => 'Создать задачу',
     'button_update' => 'Обновить',
+    'button_apply' => 'Применить',
     'email_unique' => 'Пользователь с таким email уже существует',
     'header_actions' => 'Действия',
     'header_author' => 'Автор',

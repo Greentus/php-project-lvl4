@@ -4,37 +4,22 @@
     <h1 class="mb-5">{{ __('app.link_task') }}</h1>
     <div class="row">
         <div class="col-9">
-        <form method="GET" action="{{ route('tasks.index') }}">
+            {!! Form::open(['url' => route('tasks.index'), 'method' => 'get']) !!}
             <div class="row">
                 <div class="col-auto">
-                    <select class="form-select" name="filter[status_id]">
-                        <option @empty ($filter['status_id']) selected="selected" @endempty value="">Статус</option>
-                        @foreach($statuses as $status)
-                            <option @if (is_array($filter) && $filter['status_id']==$status->id) selected="selected" @endif value="{{ $status->id }}">{{ $status->name }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('filter[status_id]', ['' => __('app.label_status')] + $statuses, empty($filter) ? '' : $filter['status_id'], ['class' => 'form-select']) !!}
                 </div>
                 <div class="col-auto">
-                    <select class="form-select" name="filter[created_by_id]">
-                        <option @empty ($filter['created_by_id']) selected="selected" @endempty value="">Автор</option>
-                        @foreach($users as $user)
-                            <option @if (is_array($filter) && $filter['created_by_id']==$user->id) selected="selected" @endif value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('filter[created_by_id]', ['' => __('app.header_author')] + $users, empty($filter) ? '' : $filter['created_by_id'], ['class' => 'form-select']) !!}
                 </div>
                 <div class="col-auto">
-                    <select class="form-select" name="filter[assigned_to_id]">
-                        <option @empty ($filter['assigned_to_id']) selected="selected" @endempty value="">Исполнитель</option>
-                        @foreach($users as $user)
-                            <option @if (is_array($filter) && $filter['assigned_to_id']==$user->id) selected="selected" @endif value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('filter[assigned_to_id]', ['' => __('app.header_user')] + $users, empty($filter) ? '' : $filter['assigned_to_id'], ['class' => 'form-select']) !!}
                 </div>
                 <div class="col-auto">
-                    <input class="btn btn-outline-primary mr-2" type="submit" value="Применить">
+                    {!! Form::submit(__('app.button_apply'), ['class' => 'btn btn-outline-primary mr-2']) !!}
                 </div>
             </div>
-        </form>
+            {!! Form::close() !!}
         </div>
         @auth
             <div class="col-3 text-end">
@@ -69,7 +54,7 @@
                     <td>
                         <a href="{{ route('tasks.edit', ['task' => $task->id]) }}" class="text-decoration-none">{{ __('app.button_change') }}</a>
                         &nbsp;
-                        @if (Auth::id()==$task->created_by_id)
+                        @if (Auth::id() == $task->created_by_id)
                             <a class="text-danger text-decoration-none" href="{{ route('tasks.destroy', ['task' => $task->id]) }}" data-confirm="Вы уверены?"
                                data-method="delete">{{ __('app.button_delete') }}</a>
                         @endif

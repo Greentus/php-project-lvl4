@@ -12,6 +12,7 @@ return array(
     'button_status_create' => 'Create status',
     'button_task_create' => 'Create task',
     'button_update' => 'Update',
+    'button_apply' => 'Apply',
     'email_unique' => 'User with this email already exists',
     'header_actions' => 'Actions',
     'header_author' => 'Author',
