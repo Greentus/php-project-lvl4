@@ -62,6 +62,7 @@ return array(
     'task_deleted' => 'Task deleted successfully',
     'task_not_deleted' => 'Не удалось удалить задачу',
     'task_not_stored' => 'Task create failed',
+    'task_not_unique' => 'Task with this name already exists',
     'task_not_updated' => 'Task update failed',
     'task_stored' => 'Task created successfully',
     'task_updated' => 'Status update successfully',

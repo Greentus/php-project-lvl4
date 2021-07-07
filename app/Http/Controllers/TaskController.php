@@ -9,6 +9,7 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -65,11 +66,12 @@ class TaskController extends Controller
     {
         $request->validate(
             [
-                'name' => 'required|max:255',
+                'name' => 'required|unique:tasks|max:255',
                 'status_id' => 'required',
             ],
             [
                 'name.required' => __('app.required'),
+                'name.unique' => __('app.task_not_unique'),
                 'status_id.required' => __('app.required')
             ]
         );
@@ -140,11 +142,12 @@ class TaskController extends Controller
     {
         $request->validate(
             [
-                'name' => 'required|max:255',
+                'name' => ['required', Rule::unique('tasks')->ignore($task->id), 'max:255'],
                 'status_id' => 'required',
             ],
             [
                 'name.required' => __('app.required'),
+                'name.unique' => __('app.task_not_unique'),
                 'status_id.required' => __('app.required')
             ]
         );
