@@ -29,8 +29,8 @@ class TaskControllerTest extends TestCase
         Artisan::call('migrate --seed');
         Session::start();
         User::create(['name' => self::TEST_USER, 'email' => self::TEST_EMAIL, 'password' => bcrypt(self::TEST_PASSWORD)]);
-        $user = User::firstWhere('name', self::TEST_USER);
-        $status = TaskStatus::first();
+        $user = (object)User::firstWhere('name', self::TEST_USER);
+        $status = (object)TaskStatus::first();
         Task::create(['name' => self::TEST_USER, 'description' => Str::random(100), 'status_id' => $status->id, 'created_by_id' => $user->id, 'assigned_to_id' => $user->id]);
     }
 
@@ -126,7 +126,7 @@ class TaskControllerTest extends TestCase
      */
     public function testEdit()
     {
-        $task = Task::first();
+        $task = (object)Task::first();
         $response = $this->get(route('tasks.edit', ['task' => $task->id]));
         $response->assertDontSee($task->name);
         $response->assertDontSee(strval(__('app.button_update')));
