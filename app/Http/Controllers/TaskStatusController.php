@@ -55,17 +55,6 @@ class TaskStatusController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\TaskStatus $taskStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TaskStatus $taskStatus)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\TaskStatus $taskStatus
@@ -93,7 +82,7 @@ class TaskStatusController extends Controller
             ]
         );
         $taskStatus->name = $request->name;
-        if ($taskStatus->save()) {
+        if ($taskStatus->save() == true) {
             flash(__('app.status_updated'))->success();
         } else {
             flash(__('app.status_not_updated'))->error();
@@ -109,7 +98,7 @@ class TaskStatusController extends Controller
      */
     public function destroy(TaskStatus $taskStatus)
     {
-        if ($taskStatus->tasks->count() == 0 && $taskStatus->delete()) {
+        if ($taskStatus->tasks->count() == 0 && $taskStatus->delete() == true) {
             flash(__('app.status_deleted'))->success();
         } else {
             flash(__('app.status_not_deleted'))->error();

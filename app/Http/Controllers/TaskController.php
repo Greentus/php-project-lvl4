@@ -79,10 +79,10 @@ class TaskController extends Controller
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status_id = $request->status_id;
-        $task->created_by_id = Auth::id();
+        $task->created_by_id = Auth::user()->id;
         $task->assigned_to_id = $request->assigned_to_id ? $request->assigned_to_id : null;
-        if ($task->save()) {
-            if (!empty($request->labels) && is_array($request->labels)) {
+        if ($task->save() == true) {
+            if ($request->has('labels') && is_array($request->labels)) {
                 foreach ($request->labels as $label) {
                     if (!is_null($label)) {
                         $taskLabel = new TaskLabel();
@@ -154,9 +154,9 @@ class TaskController extends Controller
         $task->name = $request->name;
         $task->description = $request->description;
         $task->status_id = $request->status_id;
-        $task->assigned_to_id = $request->assigned_to_id ? $request->assigned_to_id : null;
-        if ($task->save()) {
-            if (!empty($request->labels) && is_array($request->labels)) {
+        $task->assigned_to_id = $request->has('assigned_to_id') ? $request->assigned_to_id : null;
+        if ($task->save() == true) {
+            if ($request->has('labels') && is_array($request->labels)) {
                 foreach ($request->labels as $label) {
                     foreach ($task->labels as $taskLabel) {
                         $taskLabel->delete();
@@ -188,7 +188,7 @@ class TaskController extends Controller
             foreach ($task->labels as $label) {
                 $label->delete();
             }
-            if ($task->delete()) {
+            if ($task->delete() == true) {
                 flash(__('app.task_deleted'))->success();
             } else {
                 flash(__('app.task_not_deleted'))->error();

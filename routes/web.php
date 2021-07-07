@@ -24,7 +24,7 @@ Route::resource('task_statuses', TaskStatusController::class)->only(['index']);
 Route::resource('labels', LabelController::class)->only(['index']);
 
 Auth::routes();
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function (): void {
     Route::resource('tasks', TaskController::class)->except(['index']);
     Route::resource('task_statuses', TaskStatusController::class)->except(['index']);
     Route::resource('labels', LabelController::class)->except(['index']);

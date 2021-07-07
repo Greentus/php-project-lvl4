@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Ramsey\Collection\Collection;
 use Tests\TestCase;
 
 class LabelControllerTest extends TestCase
@@ -40,18 +41,18 @@ class LabelControllerTest extends TestCase
     public function testIndex()
     {
         $response = $this->get(route('labels.index'));
-        $response->assertDontSee(__('app.header_actions'));
-        $response->assertDontSee(__('app.button_delete'));
-        $response->assertDontSee(__('app.button_change'));
+        $response->assertDontSee(strval(__('app.header_actions')));
+        $response->assertDontSee(strval(__('app.button_delete')));
+        $response->assertDontSee(strval(__('app.button_change')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
         $response = $this->get(route('labels.index'));
-        $response->assertSee(__('app.header_actions'));
-        $response->assertSee(__('app.button_delete'));
-        $response->assertSee(__('app.button_change'));
+        $response->assertSee(strval(__('app.header_actions')));
+        $response->assertSee(strval(__('app.button_delete')));
+        $response->assertSee(strval(__('app.button_change')));
     }
 
     /**
@@ -62,14 +63,14 @@ class LabelControllerTest extends TestCase
     public function testCreate()
     {
         $response = $this->get(route('labels.create'));
-        $response->assertDontSee(__('app.button_create'));
+        $response->assertDontSee(strval(__('app.button_create')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
         $this->assertAuthenticated();
 
         $response = $this->get(route('labels.create'));
-        $response->assertSee(__('app.button_create'));
+        $response->assertSee(strval(__('app.button_create')));
     }
 
     /**
@@ -101,9 +102,10 @@ class LabelControllerTest extends TestCase
     public function testEdit()
     {
         $label = Label::first();
+        settype($label, 'object');
         $response = $this->get(route('labels.edit', ['label' => $label->id]));
         $response->assertDontSee($label->name);
-        $response->assertDontSee(__('app.button_update'));
+        $response->assertDontSee(strval(__('app.button_update')));
 
         $response = $this->post('/login', ['_token' => csrf_token(), 'email' => self::TEST_EMAIL, 'password' => self::TEST_PASSWORD]);
         $response->assertRedirect();
@@ -111,7 +113,7 @@ class LabelControllerTest extends TestCase
 
         $response = $this->get(route('labels.edit', ['label' => $label->id]));
         $response->assertSee($label->name);
-        $response->assertSee(__('app.button_update'));
+        $response->assertSee(strval(__('app.button_update')));
     }
 
     /**
@@ -126,6 +128,7 @@ class LabelControllerTest extends TestCase
         $this->assertAuthenticated();
 
         $label = Label::first();
+        settype($label, 'object');
         Label::create(['name' => self::TEST_LABEL, 'description' => Str::random(100)]);
 
         $response = $this->patch(route('labels.update', ['label' => $label->id]), ['_token' => csrf_token(), 'name' => self::TEST_LABEL]);
@@ -147,6 +150,7 @@ class LabelControllerTest extends TestCase
     public function testDelete()
     {
         $label = Label::first();
+        settype($label, 'object');
 
         $response = $this->delete(route('labels.destroy', ['label' => $label->id]), ['_token' => csrf_token()]);
         $response->assertRedirect();

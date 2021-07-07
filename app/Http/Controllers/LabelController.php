@@ -58,17 +58,6 @@ class LabelController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Label  $label
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Label $label)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Label  $label
@@ -115,7 +104,7 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        if ($label->tasks->count() == 0 && $label->delete()) {
+        if ($label->tasks->count() == 0 && $label->delete() == true) {
             flash(__('app.label_deleted'))->success();
         } else {
             flash(__('app.label_not_deleted'))->error();
