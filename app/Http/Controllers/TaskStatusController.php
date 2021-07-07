@@ -39,7 +39,10 @@ class TaskStatusController extends Controller
     {
         $request->validate(
             ['name' => 'required|unique:task_statuses|max:255'],
-            ['name.unique' => __('app.status_not_unique')]
+            [
+                'name.required' => __('app.required'),
+                'name.unique' => __('app.status_not_unique'),
+            ]
         );
         $status = new TaskStatus();
         $status->name = $request->name;
@@ -84,7 +87,10 @@ class TaskStatusController extends Controller
     {
         $request->validate(
             ['name' => ['required', Rule::unique('task_statuses')->ignore($taskStatus->id), 'max:255']],
-            ['name.unique' => __('app.status_not_unique')]
+            [
+                'name.required' => __('app.required'),
+                'name.unique' => __('app.status_not_unique')
+            ]
         );
         $taskStatus->name = $request->name;
         if ($taskStatus->save()) {
